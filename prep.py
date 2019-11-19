@@ -37,3 +37,4 @@ def time_split(train, test, target):
     y_train = trian[target]
     X_test = test.index
     y_test = test[target]
+    return X_train, y_train, X_test, y_test
