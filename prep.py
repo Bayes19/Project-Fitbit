@@ -17,6 +17,6 @@ def prep_df():
 
 
 def test_train_split(df, train_amount):
-    train_size = int(len(df) * train_prop)
+    train_size = int(len(df) * train_amount)
     train, test = df[0:train_size].reset_index(), df[train_size:len(df)].reset_index()
     return train, test
