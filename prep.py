@@ -8,8 +8,15 @@ def prep_df():
     col_int = ["Floors", "Distance", "Minutes Fairly Active", "Minutes Lightly Active", "Minutes Very Active"]
     for n in col_int:
         df[n] = df[n].astype(float)
-        print([n])
     col = ["Calories Burned","Activity Calories","Minutes Sedentary", "Steps"]
     for n in col:
         df[n] = df[n].str.replace(",", "").astype(float)
     return df
+
+
+
+
+def test_train_split(df, train_amount):
+    train_size = int(len(df) * train_prop)
+    train, test = df[0:train_size].reset_index(), df[train_size:len(df)].reset_index()
+    return train, test
