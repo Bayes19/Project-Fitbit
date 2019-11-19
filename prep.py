@@ -36,3 +36,26 @@ def time_split(train, test, target):
     X_test = test.index
     y_test = test[target]
     return X_train, y_train, X_test, y_test
+
+
+def time_split_2(df):
+    import numpy as np
+    X = df.Date
+    y = df.Steps
+
+    X = np.array(X)
+    y = np.array(y)
+
+    from sklearn.model_selection import TimeSeriesSplit
+    tss = TimeSeriesSplit(n_splits=4, max_train_size=None)
+
+    for train_index, test_index in tss.split(X):
+        X_train, X_test = X[train_index], X[test_index]
+        y_train, y_test = y[train_index], y[test_index]
+
+    X_train = pd.Series(X_train)
+    y_train = pd.Series(y_train)
+    X_test = pd.Series(X_test)
+    y_test = pd.Series(y_test)
+
+    return X_train, y_train, X_test, y_test
