@@ -17,6 +17,24 @@ def prep_df():
 
 
 def test_train_split(df, train_amount):
-    train_size = int(len(df) * train_prop)
+    train_size = int(len(df) * train_amount)
     train, test = df[0:train_size].reset_index(), df[train_size:len(df)].reset_index()
+    train.set_index["Date"]
+    teset.set_index["Date"]
     return train, test
+
+
+
+def cluster_split_train_and_test(train, test, target):
+    X_train = train.drop(columns=[target])
+    y_train = train[target]
+    X_test = test.drop(columns=[target])
+    y_test = test[target]
+    return X_train, y_train, X_test, y_test
+
+def time_split(train, test, target):
+    X_train = train.index 
+    y_train = trian[target]
+    X_test = test.index
+    y_test = test[target]
+    return X_train, y_train, X_test, y_test
