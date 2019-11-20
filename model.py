@@ -43,10 +43,23 @@ def next_two_weeks_Holt(df):
     return final
 
 
-df = next_two_weeks_Holt(df)
-sns.lineplot(df.index, df.Steps)
-sns.lineplot(df.index, df["Minutes Sedentary"])
+def lineplot(df):
+    from sklearn.preprocessing import MinMaxScaler
+    import seaborn as sns
+    scaler = MinMaxScaler()
+    scaler.fit(df)
+    df2 = pd.DataFrame(scaler.transform(df))
+    df2 = df2.rename(columns={0:"Calories Burned", 1:"Steps",2:"Distance",3:"Floors",4:"Minutes Sedentarty",5:"Minutes Lightly Active"\
+        ,6:"Minutes Fairly Active",7:"Minutes Very Active", 8:"Activity Calories", 9:"BMR"})
+    df2 = df2.set_index(df.index)
+    return df2
 
-
-
+def all_decompose(df):
+    df = df.set_index(["Date"])
+    for var in df.columns:
+        import statsmodels.api as sm
+        decomposition = sm.tsa.seasonal_decompose(df[var])
+        fig = decomposition.plot()
+        plt.title(str(var))
+        plt.show()
 
