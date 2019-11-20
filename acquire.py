@@ -9,4 +9,8 @@ def get_df():
     csv7 = pd.read_csv("oct-nov.csv")
     csv8 = pd.read_csv("nov-dec.csv")
     frames = [csv1, csv2, csv3, csv4, csv5, csv6, csv7, csv8]
-    return pd.concat(frames)
+    df = pd.concat(frames)
+    df = df.reset_index()
+    return df.drop(columns=["index"])
+
+

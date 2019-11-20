@@ -1,3 +1,9 @@
+import pandas as pd
+from prep import prep_df, time_split_2, test_train_split
+df = prep_df()
+X_train, y_train, X_test, y_test = time_split_2(df)
+train, test = test_train_split(df, .66)
+
 def evaluate(target_var, train = train, test = test, output=True):
     mse = metrics.mean_squared_error(test[target_var], yhat[target_var])
     rmse = math.sqrt(mse)
@@ -22,6 +28,3 @@ def plot_and_eval(target_vars, train = train, test = test, metric_fmt = '{:.2f}'
         print(f'{var} -- MSE: {metric_fmt} RMSE: {metric_fmt}'.format(mse, rmse))
 
     plt.show()
-
-
-
