@@ -1,5 +1,6 @@
 import pandas as pd
 from prep import prep_df, time_split_2, test_train_split
+import seaborn as sns
 df = prep_df()
 X_train, y_train, X_test, y_test = time_split_2(df)
 train, test = test_train_split(df, .66)
@@ -28,3 +29,24 @@ def plot_and_eval(target_vars, train = train, test = test, metric_fmt = '{:.2f}'
         print(f'{var} -- MSE: {metric_fmt} RMSE: {metric_fmt}'.format(mse, rmse))
 
     plt.show()
+
+    yhat[var] = pd.DataFrame(model.forecast(test[var].shape[0]), columns=[var])
+
+def next_two_weeks_Holt(df):
+    import matplotlib.pyplot as plt
+    from statsmodels.tsa.api import Holt
+    df = df.set_index('Date')
+    final = pd.DataFrame()
+    for var in df.columns:
+            model = Holt(df[var]).fit(smoothing_level=.3, smoothing_slope=.1, optimized=False)
+            final[var] = pd.Series(model.forecast(14))
+    return final
+
+
+df = next_two_weeks_Holt(df)
+sns.lineplot(df.index, df.Steps)
+sns.lineplot(df.index, df["Minutes Sedentary"])
+
+
+
+

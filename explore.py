@@ -19,3 +19,5 @@ for group in groups:
 	plt.title(df.columns[group], y=0.5, loc='right')
 	i += 1
 plt.show()
+
+
