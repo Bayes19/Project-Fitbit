@@ -1,6 +1,9 @@
 import pandas as pd
 from prep import prep_df, time_split_2, test_train_split
 import seaborn as sns
+from fbprophet import Prophet
+from matplotlib.dates import MonthLocator, num2date
+from matplotlib.ticker import FuncFormatter
 
 
 
@@ -43,17 +46,59 @@ def all_decompose(df):
 def prep_prophet_data1(df: pd.DataFrame) -> pd.DataFrame:
     return (df.assign(ds=pd.to_datetime(df.Date)).sort_values('ds')
             .assign(y=df.Steps)
-            .groupby(['ds'])['Steps'].sum().reset_index().set_index('ds'))
+            .groupby(['ds'])['y'].sum().reset_index().set_index('ds'))
+           
 
 def prep_steps_data2(df: pd.DataFrame) -> pd.DataFrame:
     return (df.assign(ds=pd.to_datetime(df.Date)).sort_values('ds')
             .assign(y=df.Calories_Burned)
-            .groupby(['ds'])['Calories_Burned'].sum().reset_index().set_index('ds'))
+            .groupby(['ds'])['y'].sum().reset_index().set_index('ds'))
 
 
 def prep_steps_data3(df: pd.DataFrame) -> pd.DataFrame:
     return (df.assign(ds=pd.to_datetime(df.Date)).sort_values('ds')
             .assign(y=df.Activity_Calories)
-            .groupby(['ds'])['Activity_Calories'].sum().reset_index().set_index('ds'))
+            .groupby(['ds'])['y'].sum().reset_index().set_index('ds'))
 
 
+def steps_prophet(df1):
+    m = Prophet()
+    m.fit(df1)
+    #Predictions
+    future1 = m.make_future_dataframe(periods=365)
+    forecast1 = m.predict(future1)
+    forecast1[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].head()
+    #Predicting 14 days into the future
+    future1 = m.make_future_dataframe(periods=14)
+    forecast1 = m.predict(future1)
+    return forecast1.tail(14)
+
+def Calories_Burned_prophet(df2):
+
+    m = Prophet()
+
+    m.fit(df2)
+
+    #Create a placeholder dataframe
+
+    future2 = m.make_future_dataframe(periods=14)
+
+    forecast2 = m.predict(future2)
+    
+    return df2, future2, forecast2
+
+
+def Activity_Calories_prophet(df3):
+
+    m = Prophet()
+
+    m.fit(df3)
+
+    #Create a placeholder dataframe
+
+    future3 = m.make_future_dataframe(periods=14)
+
+    forecast3 = m.predict(future3)
+    
+    return df3, future3, forecast3
+    
