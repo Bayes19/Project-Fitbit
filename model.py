@@ -43,10 +43,5 @@ def next_two_weeks_Holt(df):
     return final
 
 
-df = next_two_weeks_Holt(df)
-sns.lineplot(df.index, df.Steps)
-sns.lineplot(df.index, df["Minutes Sedentary"])
-
-
 
 
