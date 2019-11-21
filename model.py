@@ -62,6 +62,7 @@ def prep_steps_data3(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def steps_prophet(df1):
+   #steps
     m = Prophet()
     m.fit(df1)
     #Predictions
@@ -71,34 +72,45 @@ def steps_prophet(df1):
     #Predicting 14 days into the future
     future1 = m.make_future_dataframe(periods=14)
     forecast1 = m.predict(future1)
-    return forecast1.tail(14)
+    df1= forecast1.filter(['ds', 'yhat'])
+    df1= df1.rename(columns={'ds':'future date', "yhat": "predicted_steps"}).tail(14)
+    df1.predicted_steps=df1.predicted_steps.round()
+    df1=df1.tail(14)
+    return df1
 
 def Calories_Burned_prophet(df2):
-
+    #Calories Burned
     m = Prophet()
-
     m.fit(df2)
-
-    #Create a placeholder dataframe
-
-    future2 = m.make_future_dataframe(periods=14)
-
+    #Predictions
+    future2 = m.make_future_dataframe(periods=365)
     forecast2 = m.predict(future2)
-    
-    return df2, future2, forecast2
+    forecast2[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].head()
+    #Predicting 14 days into the future
+    future2 = m.make_future_dataframe(periods=14)
+    forecast2 = m.predict(future2)
+    df2= forecast2.filter(['ds', 'yhat'])
+    df2= df2.rename(columns={'ds':'future date', "yhat": "Calories_Burned"}).tail(14)
+    df2.Calories_Burned=df2.Calories_Burned.round()
+    df2=df2.tail(14)
+    return df2
+
+
 
 
 def Activity_Calories_prophet(df3):
-
+    #Activity Calories
     m = Prophet()
-
     m.fit(df3)
-
-    #Create a placeholder dataframe
-
-    future3 = m.make_future_dataframe(periods=14)
-
+    #Predictions
+    future3 = m.make_future_dataframe(periods=365)
     forecast3 = m.predict(future3)
-    
-    return df3, future3, forecast3
-    
+    forecast3[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].head()
+    #Predicting 14 days into the future
+    future3 = m.make_future_dataframe(periods=14)
+    forecast3 = m.predict(future3)
+    df3= forecast3.filter(['ds', 'yhat'])
+    df3= df3.rename(columns={'ds':'future date', "yhat": "Activity_Calories"}).tail(14)
+    df3.Activity_Calories=df3.Activity_Calories.round()
+    df3=df3.tail(14)
+    return df3
